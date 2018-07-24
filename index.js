@@ -24,15 +24,35 @@ function cardObject() {
     };
 }
 
-$.each(localStorage, function(key) {
-    var cardData = JSON.parse(this);
+//PARSING u can't iterate through object so iuterate thru
+//keys in object (pulls out all the keys and stores in array)
+//
+
+var storeObj = (Object.keys(localStorage))
+// console.log(storeObj)
+// var get = localStorage.getItem(storeObj[0]);
+// console.log(get)
+$.each(storeObj, function(index, key) {
+   var gettingKey =  localStorage.getItem(key);
+    var parsedKey = JSON.parse(gettingKey)
+    console.log(parsedKey)
     numCards++;
-    $( ".bottom-box" ).prepend(newCard(key, cardData.title, cardData.body, cardData.quality));
+    $( ".bottom-box" ).prepend(newCard(key, parsedKey.title, parsedKey.body, parsedKey
+
+        .quality));
 });
 
+//STRINGIFYING
+
+// localStorage.forEach(function(localStore) {
+//     console.log(localStorage)
+
+// });
+
 var localStoreCard = function() {
-    var cardString = JSON.stringify(cardObject());
-    localStorage.setItem('card' + numCards  , cardString);
+    var cardString = JSON.stringify(title);
+    localStorage.setItem('card' + numCards , cardString);
+    console.log(cardString)
 }
 
 $('.save-btn').on('click', function(event) {
