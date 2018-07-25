@@ -36,11 +36,10 @@ $('.bottom-box').prepend(`<div class="card-container" data-id=${object.id}>
     clearInputFields();
 };
 function deleteCard(event) {
-    $(this).parent().parent().remove();
-    var id = $(this).closest('li').attr('id');
-    var cardHTML = $(this).closest('.card-container').remove();
-    localStorage.removeItem(cardHTML[0].id);
- }
+   var id = $(this).closest('div').attr('id');
+   var cardHTML = $(this).closest('.card-container').remove();
+   localStorage.removeItem(object.id);
+}
 // function retrievInfo() {
 //     for(var i = 0; i < localStorage.length; i++) {
 //         var retrieveItem = (JSON.parse((localStorage.getItem(localStorage.key(i))));
