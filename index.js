@@ -2,6 +2,7 @@ pageLoad();
 
 $(".bottom-box").on('click', '.delete-button', deleteCard);
 $(".save-btn").on('click', getCardInfo); 
+
 function CardObject(object) {
   event.preventDefault();
   this.id = object.id;
@@ -67,11 +68,11 @@ function deleteCard(event) {
 //it ill pul out item parse it run it rhu new card, run thru card and 
 // function pullOut () {
 // }
- function pageLoad() {
-    for (var i = 0; i < localStorage.length; i++) {
-      string = localStorage.getItem(localStorage.key(i));
-      object = JSON.parse(string);
-      makeCard(object);
+function pageLoad() {
+  for (var i = 0; i < localStorage.length; i++) {
+    string = localStorage.getItem(localStorage.key(i));
+    object = JSON.parse(string);
+    makeCard(object);
     };
   };
 
@@ -84,11 +85,18 @@ function updateStorage(id, object) {
     string = JSON.stringify(object);
     localStorage.setItem(id, string);
 };
-// function pullLocalStoredCard(id) {
-//     var string = localStorage.getItem(id);
-//     var object = JSON.parse(string);
-//     return object;
-//   };
+
+$(document).ready(function(){
+  $("#search-input").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $(".card-container").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+// function getLocalCard {
+
+// }
       
 function clearInputFields() {
     $('#title-input').val('');
