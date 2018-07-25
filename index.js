@@ -1,120 +1,80 @@
-var title = $('#title-input').val();
-var body = $('#body-input').val();
-var numCards = 0;
-var qualityVariable = "swill";
+$(".bottom-box").on('click', '.delete-button', deleteCard);
+$(".save-btn").on('click', getCardInfo); 
 
-var newCard = function(id , title , body , quality) {
-    return '<div id="' + id + '"class="card-container"><h2 class="title-of-card">'  
-            + title +  '</h2>'
-            + '<button class="delete-button"></button>'
-            +'<p class="body-of-card">'
-            + body + '</p>'
-            + '<button class="upvote"></button>' 
-            + '<button class="downvote"></button>' 
-            + '<p class="quality">' + 'quality:' + '<span class="qualityVariable">' + quality + '</span>' + '</p>'
-            + '<hr>' 
-            + '</div>';
+function CardObject(object) {
+  event.preventDefault();
+  this.id = object.id;
+  this.title = object.title;
+  this.body = object.body;
+  this.quality = object.quality || 'swill';
 };
 
-function cardObject() {
-    return {
-        title: $('#title-input').val(),
-        body: $('#body-input').val(),
-        quality: qualityVariable
-    };
-}
-
-//PARSING u can't iterate through object so iuterate thru
-//keys in object (pulls out all the keys and stores in array)
-//
-
-var storeObj = (Object.keys(localStorage))
-// console.log(storeObj)
-// var get = localStorage.getItem(storeObj[0]);
-// console.log(get)
-$.each(storeObj, function(index, key) {
-   var gettingKey =  localStorage.getItem(key);
-    var parsedKey = JSON.parse(gettingKey)
-    console.log(parsedKey)
-    numCards++;
-    $( ".bottom-box" ).prepend(newCard(key, parsedKey.title, parsedKey.body, parsedKey
-
-        .quality));
-});
-
-//STRINGIFYING
-
-// localStorage.forEach(function(localStore) {
-//     console.log(localStorage)
-
-// });
-
-var localStoreCard = function() {
-    var cardString = JSON.stringify(title);
-    localStorage.setItem('card' + numCards , cardString);
-    console.log(cardString)
-}
-
-$('.save-btn').on('click', function(event) {
-    event.preventDefault();
-    if ($('#title-input').val() === "" || $('#body-input').val() === "") {
+function getCardInfo(e) {
+    e.preventDefault();
+    if ($('#title-input').val() === '' || $('#body-input').val() === '') {
        return false;
     };  
 
-    numCards++;
-    $( ".bottom-box" ).prepend(newCard('card' + numCards, $('#title-input').val(), $('#body-input').val(), qualityVariable)); 
-    localStoreCard();
-    $('form')[0].reset();
-});
+    id = $.now();
+    title = $('#title-input').val();
+    body = $('#body-input').val();
+    quality = 'swill';
 
-$(".bottom-box").on('click', function(event){
-    var currentQuality = $($(event.target).siblings('p.quality').children()[0]).text().trim();
-    var qualityVariable;
+    var card = new CardObject({id: id, title: title, body: body, quality: quality});
 
-    if (event.target.className === "upvote" || event.target.className === "downvote"){
+    makeCard(card);
+    localStoredCard(card,id);
+    clearInputFields();
+};
 
-        if (event.target.className === "upvote" && currentQuality === "plausible"){
-            qualityVariable = "genius";
-            $($(event.target).siblings('p.quality').children()[0]).text(qualityVariable);
-               
-        } else if (event.target.className === "upvote" && currentQuality === "swill") {
-            qualityVariable = "plausible";
-            $($(event.target).siblings('p.quality').children()[0]).text(qualityVariable);
-               
-        } else if (event.target.className === "downvote" && currentQuality === "plausible") {
-            qualityVariable = "swill"
-            $($(event.target).siblings('p.quality').children()[0]).text(qualityVariable);
+function makeCard(object) {
+    $(".bottom-box").prepend(`
+    <li id=${object.id} class="card-container">
+      <header class="idea-head">
+        <h1 class="title-of-card"contenteditable>${object.title}</h1>
+        <img src="images/delete.svg" alt="Delete" class="delete-button buttons">
+      </header>
+      <p class="body-of-card"contenteditable>${object.body}</p>
+      <footer class="footer-of-card">
+        <img src="images/upvote.svg" alt="Up Vote" class="upvote">
+        <img src="images/downvote.svg" alt="Down Vote" class="downvote">
+        <p class="quality"><span class="quality-title">quality: </span><span class="change-quality">${object.quality}</span></p>
+      </footer>
+    </li>
+  `)
+    clearInputFields();
 
-        } else if (event.target.className === "downvote" && currentQuality === "genius") {
-            qualityVariable = "plausible"
-            $($(event.target).siblings('p.quality').children()[0]).text(qualityVariable);
+};
 
-        } else if (event.target.className === "downvote" && currentQuality === "swill") {
-            qualityVariable = "swill";
-        
-        } else if (event.target.className === "upvote" && currentQuality === "genius") {
-            qualityVariable = "genius";
-        }
+function deleteCard(event) {
+    $(this).parent().parent().remove();
+    var id = $(this).closest('li').attr('id');
+    var cardHTML = $(this).closest('.card-container').remove();
+    localStorage.removeItem(cardHTML[0].id);
+ }
 
-    var cardHTML = $(event.target).closest('.card-container');
-    var cardHTMLId = cardHTML[0].id;
-    var cardObjectInJSON = localStorage.getItem(cardHTMLId);
-    var cardObjectInJS = JSON.parse(cardObjectInJSON);
+function localStoredCard(card,id) {
+  var cardToStore = card;
+  var stringifiedCard = JSON.stringify(cardToStore);
+  localStorage.setItem(id, stringifiedCard);
+}
 
-    cardObjectInJS.quality = qualityVariable;
+function updateStorage(id, object) {
+    string = JSON.stringify(object);
+    localStorage.setItem(id, string);
 
-    var newCardJSON = JSON.stringify(cardObjectInJS);
-    localStorage.setItem(cardHTMLId, newCardJSON);
-    }
-   
-    else if (event.target.className === "delete-button") {
-        var cardHTML = $(event.target).closest('.card-container').remove();
-        var cardHTMLId = cardHTML[0].id;
-        localStorage.removeItem(cardHTMLId);
-    }
-});
+};
+
+function pullLocalStoredCard(id) {
+    var string = localStorage.getItem(id);
+    var object = JSON.parse(string);
+    return object;
+  };
       
-
+function clearInputFields() {
+    $('#title-input').val('');
+    $('#body-input').val('');
+}
 
 
 
