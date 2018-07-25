@@ -41,12 +41,56 @@ $('.bottom-box').prepend(`<div class="card-container" data-id=${object.id}>
 
 };
 
+
+
+
+
+
 function deleteCard(event) {
     $(this).parent().parent().remove();
     var id = $(this).closest('li').attr('id');
     var cardHTML = $(this).closest('.card-container').remove();
     localStorage.removeItem(cardHTML[0].id);
  }
+
+
+
+// function retrievInfo() {
+//     for(var i = 0; i < localStorage.length; i++) {
+//         var retrieveItem = (JSON.parse((localStorage.getItem(localStorage.key(i))));
+//             console.log(retrieveItem)
+
+// $('.bottom-box').prepend(`<div class="card-container" data-id=${object.id}>
+//          <h2 class="title-of-card" contenteditable="true" onfocusout="getLocalCard(event)">${object.title}</h2>
+//          <button class="delete-button"></button>
+//        <p class="body-of-card" contenteditable="true" onfocusout="getLocalCard(event)">${object.body}</p>
+//          <button class="upvote"></button>
+//          <button class="downvote"></button>
+//          <p class="quality"> quality: <span class="qualityVariable">${object.quality}</span></p>
+//        <hr>
+//      </div>`);
+//     clearInputFields();
+
+// };
+// }
+
+//
+//need function tht's going to pull everythiung in local sotrate
+//run thru it a foreach and generate a new card
+//call it on pae load pull it out of storage
+//pull out the keys and iterate thru it 
+//run thru it a foreach and generate a new card
+//run it thru new card function
+// tyehj function will call makeCard in the for loop 
+//it ill pul out item parse it run it rhu new card, rinm thru card and 
+
+
+
+
+
+
+
+
 
 function localStoredCard(card,id) {
   var cardToStore = card;
