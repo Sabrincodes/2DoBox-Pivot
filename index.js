@@ -28,20 +28,15 @@ function getCardInfo(e) {
 };
 
 function makeCard(object) {
-    $(".bottom-box").prepend(`
-    <li id=${object.id} class="card-container">
-      <header class="idea-head">
-        <h1 class="title-of-card"contenteditable>${object.title}</h1>
-        <img src="images/delete.svg" alt="Delete" class="delete-button buttons">
-      </header>
-      <p class="body-of-card"contenteditable>${object.body}</p>
-      <footer class="footer-of-card">
-        <img src="images/upvote.svg" alt="Up Vote" class="upvote">
-        <img src="images/downvote.svg" alt="Down Vote" class="downvote">
-        <p class="quality"><span class="quality-title">quality: </span><span class="change-quality">${object.quality}</span></p>
-      </footer>
-    </li>
-  `)
+$('.bottom-box').prepend(`<div class="card-container" data-id=${object.id}>
+         <h2 class="title-of-card" contenteditable="true" onfocusout="getLocalCard(event)">${object.title}</h2>
+         <button class="delete-button"></button>
+       <p class="body-of-card" contenteditable="true" onfocusout="getLocalCard(event)">${object.body}</p>
+         <button class="upvote"></button>
+         <button class="downvote"></button>
+         <p class="quality"> quality: <span class="qualityVariable">${object.quality}</span></p>
+       <hr>
+     </div>`);
     clearInputFields();
 
 };
@@ -75,6 +70,35 @@ function clearInputFields() {
     $('#title-input').val('');
     $('#body-input').val('');
 }
+
+// $(".bottom-box").on('click', function(event){
+//     var currentQuality = $($(event.target).siblings('p.quality').children()[0]).text().trim();
+//     var qualityVariable;
+
+//     if (event.target.className === "upvote" || event.target.className === "downvote"){
+
+//         if (event.target.className === "upvote" && currentQuality === "plausible"){
+//             qualityVariable = "genius";
+//             $($(event.target).siblings('p.quality').children()[0]).text(qualityVariable);
+               
+//         } else if (event.target.className === "upvote" && currentQuality === "swill") {
+//             qualityVariable = "plausible";
+//             $($(event.target).siblings('p.quality').children()[0]).text(qualityVariable);
+               
+//         } else if (event.target.className === "downvote" && currentQuality === "plausible") {
+//             qualityVariable = "swill"
+//             $($(event.target).siblings('p.quality').children()[0]).text(qualityVariable);
+
+//         } else if (event.target.className === "downvote" && currentQuality === "genius") {
+//             qualityVariable = "plausible"
+//             $($(event.target).siblings('p.quality').children()[0]).text(qualityVariable);
+
+//         } else if (event.target.className === "downvote" && currentQuality === "swill") {
+//             qualityVariable = "swill";
+        
+//         } else if (event.target.className === "upvote" && currentQuality === "genius") {
+//             qualityVariable = "genius";
+//         }
 
 
 
